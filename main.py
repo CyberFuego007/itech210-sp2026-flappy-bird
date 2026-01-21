@@ -11,7 +11,7 @@ clock = pygame.time.Clock()
 #color constants
 BLACK = (0,0,0)
 
-#fonts
+#load fonts
 score_font = pygame.font.SysFont("arial", 30)
 go_font = pygame.font.SysFont("arial", 60)
 
@@ -20,16 +20,21 @@ pygame.mixer.music.load("forest.mp3")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.05)
 
-#background
+#load images
+bird = pygame.image.load("bird.png").convert_alpha()
+pipe = pygame.image.load('pipe.png').convert_alpha()
 bg = pygame.image.load("bg.png")
-bg = pygame.transform.scale(bg, (WIDTH, HEIGHT))
+
+#background
+background = pygame.transform.scale(bg, (WIDTH, HEIGHT))
 
 #player
-player_pos = [100,200]
-player_sprite = pygame.image.load("bird.png").convert_alpha()
-player_sprite = pygame.transform.scale(player_sprite, (64,64))
+player_pos = [100,200] 
+player_sprite = pygame.transform.scale(bird, (64,64))
 player_rect = player_sprite.get_rect(center=player_pos)
 player_hit = player_rect.inflate(-20,-20)
+player_lives = 3
+player_life_sprite = pygame.transform.scale(bird, (32,32))
 force =0
 gravity = 1
 
@@ -39,12 +44,12 @@ pipes = [
     [800, random.randint(50, 225)], 
     [1100, random.randint(50, 225)], 
 ]
-pipe_1 = pygame.image.load('pipe.png').convert_alpha()
-pipe_ratio = pipe_1.get_width() / pipe_1.get_height()
+pipe_ratio = pipe.get_width() / pipe.get_height()
 new_width = 150
-new_height = int(new_width * pipe_1.get_height() / pipe_1.get_width())
-pipe_1 = pygame.transform.scale(pipe_1, (new_width, new_height))
+new_height = int(new_width * pipe.get_height() / pipe.get_width())
+pipe_1 = pygame.transform.scale(pipe, (new_width, new_height))
 pipe_2 = pygame.transform.flip(pipe_1, False, True)
+
 
 gap = 150
 speed = 1
@@ -109,7 +114,7 @@ while running:
     screen.fill(BLACK)
 
     #draw background
-    screen.blit(bg, (0,0))
+    screen.blit(background, (0,0))
 
     #draw player
     screen.blit(player_sprite, player_rect) 
@@ -128,6 +133,11 @@ while running:
     score_text = score_font.render(f"Score: {score}", True, (255,255,255))
     score_rect = score_text.get_rect(center=(WIDTH//2,25))
     screen.blit(score_text, score_rect)
+
+    #draw player lives
+    for i in range(player_lives):
+        player_life_rect = player_life_sprite.get_rect(bottomleft=(10 +(i*40), HEIGHT - 10))
+        screen.blit(player_life_sprite, player_life_rect) 
 
     if game_over:
         go_text = go_font.render("GAME OVER", True, (255,255,255))

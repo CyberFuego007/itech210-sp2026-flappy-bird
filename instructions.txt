@@ -1,0 +1,18 @@
+Currently whe you play the game, if the bird touches a pipe, the game is
+immediately over.  However there is a concept of lives already in the game
+as demonstrated by the birds down in the lower left corner of the screen.
+
+Your assignment is to implement the lives system.
+
+you will use if statements to check for when the bird collides with a pipe.
+Once that collision happens, instead of being an immediate game over, the 
+player will lose one life and become immune to the pipes for a short bit.
+
+Once the player reaches 0 lives, then the game over sequence will take affect
+like normal.
+
+Once you have completed this task, plaease feel free to play with the game to 
+make it your own before turning in.  YOu can use the website https://opengameart.org
+to get sprites for the bird, the pipes, the background, or even new music.
+
+You can also play with the way scoring works or the speed.
