@@ -16,14 +16,14 @@ score_font = pygame.font.SysFont("arial", 30)
 go_font = pygame.font.SysFont("arial", 60)
 
 #load music
-pygame.mixer.music.load("forest.mp3")
+pygame.mixer.music.load("boss_battle.wav")
 pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(0.05)
+pygame.mixer.music.set_volume(0.08)
 
 #load images
 bird = pygame.image.load("bird.png").convert_alpha()
 pipe = pygame.image.load('pipe.png').convert_alpha()
-bg = pygame.image.load("bg.png")
+bg = pygame.image.load("epic_bg.png")
 
 #background
 background = pygame.transform.scale(bg, (WIDTH, HEIGHT))
@@ -50,7 +50,7 @@ new_height = int(new_width * pipe.get_height() / pipe.get_width())
 pipe_1 = pygame.transform.scale(pipe, (new_width, new_height))
 pipe_2 = pygame.transform.flip(pipe_1, False, True)
 
-
+hit_cooldown = 0
 gap = 150
 speed = 1
 score = 0
@@ -70,7 +70,14 @@ while running:
                 running = False
             if event.key == pygame.K_SPACE:
                 force += 10
-
+            if event.key == pygame.K_r and game_over:
+                player_lives = 3
+                game_over = False
+                bird_y = 300
+                force = 0
+    
+    if hit_cooldown > 0:
+                hit_cooldown -= 1
     if game_over:
         continue
 
@@ -100,8 +107,15 @@ while running:
         hit_1 = rect_1.inflate(-20,-20)
         hit_1.center = rect_1.center
         
-        if player_hit.colliderect(hit_2) or player_hit.colliderect(hit_1):
+        if hit_cooldown == 0:
+            if player_hit.colliderect(hit_2) or player_hit.colliderect(hit_1):
+                player_lives -= 1
+                hit_cooldown = 60   # 1 second invincibility
+                player_pos [1] = 200
+                force = 0
+        if player_lives <= 0:
             game_over = True
+
         
 
     #update score
